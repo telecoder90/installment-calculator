@@ -45,7 +45,6 @@ class CalculatorController extends Controller implements CalculatorInterface
             default:
                 break;
         }
-        $monthly_payment = ceil( ( ($object_price-$started_sum) / $period_monthes ) * $fee );
-        return $monthly_payment;
+        return ceil( ( ($object_price-$started_sum) / $period_monthes ) * $fee );
     }
 }
