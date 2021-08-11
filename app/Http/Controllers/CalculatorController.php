@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 class CalculatorController extends Controller implements CalculatorInterface
 {
 
+    private const DEFAULT_FEE_VALUE = 1;
     private const FEE_FOR_12_MONTHS = 1.03;
     private const FEE_FOR_24_MONTHS = 1.08;
     private const FEE_FOR_36_MONTHS = 1.13;
@@ -38,7 +39,7 @@ class CalculatorController extends Controller implements CalculatorInterface
 
     public function calculateMonthlyPayment(int $object_price, int $started_sum, int $period_monthes): int
     {
-        $fee = 1;
+        $fee = self::DEFAULT_FEE_VALUE;
         switch ($period_monthes) {
             case 12:
                 $fee = self::FEE_FOR_12_MONTHS; 
