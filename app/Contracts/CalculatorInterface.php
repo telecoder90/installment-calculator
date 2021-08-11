@@ -21,7 +21,7 @@ interface CalculatorInterface
      * @param int $started_sum
      * @param int $period_monthes
      * 
-     * @return JsonResponse 
+     * @return int 
     */
     public function calculateMonthlyPayment(int $object_price, int $started_sum, int $period_monthes): int;
 }
