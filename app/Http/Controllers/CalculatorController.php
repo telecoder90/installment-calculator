@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Contracts\CalculatorInterface;
@@ -9,6 +11,11 @@ use Illuminate\Http\Request;
 
 class CalculatorController extends Controller implements CalculatorInterface
 {
+
+    private const FEE_FOR_12_MONTHS = 1.03;
+    private const FEE_FOR_24_MONTHS = 1.08;
+    private const FEE_FOR_36_MONTHS = 1.13;
+
     public function index()
     {
         return view('calculator.index');
@@ -17,9 +24,9 @@ class CalculatorController extends Controller implements CalculatorInterface
     public function calculate(CalculatorRequest $request): JsonResponse
     {
         $monthly_payment = $this->calculateMonthlyPayment(
-            $request->object_price,
-            $request->started_sum,
-            $request->period_monthes
+            (int) $request->object_price,
+            (int) $request->started_sum,
+            (int) $request->period_monthes
         );
 
         return response()->json([
@@ -32,19 +39,19 @@ class CalculatorController extends Controller implements CalculatorInterface
     public function calculateMonthlyPayment(int $object_price, int $started_sum, int $period_monthes): int
     {
         $fee = 1;
-        switch($period_monthes){
+        switch ($period_monthes) {
             case 12:
-                $fee += 1.03; 
+                $fee = self::FEE_FOR_12_MONTHS; 
                 break;
             case 24:
-                $fee += 1.08; 
+                $fee = self::FEE_FOR_24_MONTHS; 
                 break;
             case 36:
-                $fee += 1.13; 
+                $fee = self::FEE_FOR_36_MONTHS; 
                 break;
             default:
                 break;
         }
-        return ceil( ( ($object_price-$started_sum) / $period_monthes ) * $fee );
+        return (int) ceil((($object_price-$started_sum)/$period_monthes)*$fee);
     }
 }
