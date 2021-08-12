@@ -24,3 +24,5 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/calculator', 'CalculatorController@index')->name('calculator');
     Route::post('/calculate', 'CalculatorController@calculate')->name('calculate');
 });
+
+Route::post('/inquiry', 'InquiryController@sendInquiry')->name('inquiry');

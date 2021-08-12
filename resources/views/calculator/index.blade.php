@@ -72,6 +72,37 @@
                             </div>
                         </div>
                     </form>
+
+                    <br><hr><br>
+
+                    <h2>Or leave your email and send an Inquiry!</h2>
+                    <p>In the feedback, we will send the most hot propositions to you ;)</p>
+
+                    <form method="POST" action="{{ route('inquiry') }}" id="inquiryForm" autocomplete="off">
+                        @csrf
+
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control" name="email" value="" required autocomplete="email" autofocus>
+
+                                <span id="email_feedback" class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success" role="alert" id="responseInquiryMessage" style="display: none;"></div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="button" id="inquiryFormSubmit" class="btn btn-primary">
+                                    SEND INQUIRY
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -102,6 +133,28 @@
                             $('#'+key + '_feedback strong').text(err);
                         });
                         $('#responseMessage').html("The given data was invalid.");
+                    },
+                    dataType: 'json'
+                });   
+            });
+
+            $("#inquiryFormSubmit" ).bind( "click", function() {
+                $('#responseInquiryMessage').hide();
+                jQuery.ajax({
+                    url: "/inquiry",
+                    type: "POST",
+                    data: $('#inquiryForm').serialize(),
+                    success: function(resp, status){
+                        $('#responseInquiryMessage').html(resp.message);
+                        $('#responseInquiryMessage').show();
+                    },
+                    error: function(resp, status){
+                        $.each( resp.responseJSON.errors, function( key, err ) {
+                            // console.log(key+' - '+ err);
+                            $('#'+key).addClass('is-invalid');
+                            $('#'+key + '_feedback strong').text(err);
+                        });
+                        $('#responseInquiryMessage').html("The given data was invalid.");
                     },
                     dataType: 'json'
                 });   
